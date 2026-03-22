@@ -1,14 +1,14 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/agentes", "destination": "./public/pages/agentes.html" },
-    { "source": "/login", "destination": "./public/pages/login.html" },
-    { "source": "/enviar", "destination": "./public/pages/enviar-look.html" },
-    { "source": "/", "destination": "./public/pages/index.html" }
+    { "source": "/agentes", "destination": "/public/pages/agentes.html" },
+    { "source": "/login", "destination": "/public/pages/login.html" },
+    { "source": "/enviar", "destination": "/public/pages/enviar-look.html" },
+    { "source": "/", "destination": "/public/pages/index.html" }
   ],
   "headers": [
     {
-      "source": "./api/(.*)",
+      "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         {
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "source": "./public/sw.js",
+      "source": "/public/sw.js",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache" },
         { "key": "Content-Type", "value": "application/javascript" }
