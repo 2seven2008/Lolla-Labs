@@ -1,22 +1,18 @@
 {
+  "outputDirectory": ".",
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/login", "destination": "/login.html" },
     { "source": "/agentes", "destination": "/agentes.html" },
-    { "source": "/enviar", "destination": "/enviar-look.html" }
+    { "source": "/enviar", "destination": "/enviar-look.html" },
+    { "source": "/login", "destination": "/login.html" }
   ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET,POST,PATCH,OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type,Authorization"
-        }
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PATCH,OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type,Authorization" }
       ]
     }
   ]
