@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#111111" />
     <title>Painel de Agentes — Lolla Labs</title>
-    <link rel="manifest" href="./manifest.json" />
+    <link rel="manifest" href="./public/manifest.json" />
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
@@ -124,38 +124,35 @@
     <script src="./js/auth.js"></script>
     <script src="./js/app.js"></script>
     <script>
+      // ─── Auth Guard ───────────────────────────────────────
+      // Redireciona para /login imediatamente se não houver token válido.
+      // Deve ser a primeira coisa a executar antes de qualquer lógica.
+      if (!Auth.requireAuth()) {
+        // requireAuth() já faz o redirect — paramos aqui
+        throw new Error("Unauthenticated");
+      }
+
       let allLooks = [];
       let currentFilter = "todos";
       let currentLookId = null;
 
-      // ─── Auth Guard ───────────────────────────────────────
-      const token = localStorage.getItem("lolla_token");
-      if (!token) window.location.href = "/login";
-
       document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.removeItem("lolla_token");
-        localStorage.removeItem("lolla_agent");
-        window.location.href = "/login";
+        Auth.logout();
       });
 
       // ─── Load Looks ───────────────────────────────────────
       async function loadLooks() {
         try {
-          const res = await fetch("/api/looks", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (res.status === 401) {
-            localStorage.removeItem("lolla_token");
-            window.location.href = "/login";
-            return;
-          }
-
-          const data = await res.json();
+          // API.get() injeta o Bearer token automaticamente e
+          // redireciona para /login em caso de 401
+          const data = await API.get("/looks");
           allLooks = data.looks || [];
           updateStats();
           renderLooks();
         } catch (err) {
+          // Se for redirect de sessão, err.message === "Sessão expirada"
+          // e o redirect já foi feito. Para outros erros, mostra aviso.
+          if (err.message === "Sessão expirada") return;
           document.getElementById("looksGrid").innerHTML = `
           <div class="empty-state">
             <div class="empty-state-icon">⚠</div>
@@ -261,7 +258,6 @@
         <span class="look-card-tag">${escapeHtml(look.cidade)}</span>
       `;
 
-        // Existing comment
         const existingComment = document.getElementById("existingComment");
         const existingCommentText = document.getElementById(
           "existingCommentText",
@@ -276,7 +272,6 @@
         document.getElementById("agentComment").value =
           look.comentario_agente || "";
 
-        // Hide action buttons if already analyzed
         const actionsDiv = document.getElementById("modalActions");
         const commentSection = document.getElementById("commentSection");
         if (look.status !== "pendente") {
@@ -321,18 +316,14 @@
 
       async function doAnalyze(id, status, comentario) {
         try {
-          const res = await fetch("/api/analisar-look", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ id, status, comentario_agente: comentario }),
+          // API.patch() injeta Bearer token e trata 401 automaticamente
+          await API.patch("/analisar-look", {
+            id,
+            status,
+            comentario_agente: comentario,
           });
 
-          if (!res.ok) throw new Error("Erro ao analisar");
-
-          // Update local state
+          // Atualiza estado local
           const idx = allLooks.findIndex((l) => l._id === id);
           if (idx >= 0) {
             allLooks[idx].status = status;
@@ -346,7 +337,9 @@
             status === "aprovado" ? "success" : "error",
           );
         } catch (err) {
-          showToast("Erro ao analisar look.", "error");
+          if (err.message !== "Sessão expirada") {
+            showToast("Erro ao analisar look.", "error");
+          }
         }
       }
 
@@ -367,9 +360,8 @@
         return div.innerHTML;
       }
 
-      // ─── Init ────────────────────────────────────────────
+      // ─── Init ─────────────────────────────────────────────
       loadLooks();
-      // Refresh every 60s
       setInterval(loadLooks, 60000);
     </script>
   </body>

@@ -1,10 +1,8 @@
 {
-  "version": 2,
   "rewrites": [
-    { "source": "/agentes", "destination": "/agentes.html" },
     { "source": "/login", "destination": "/login.html" },
-    { "source": "/enviar", "destination": "/enviar-look.html" },
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/agentes", "destination": "/agentes.html" },
+    { "source": "/enviar", "destination": "/enviar-look.html" }
   ],
   "headers": [
     {
@@ -19,13 +17,6 @@
           "key": "Access-Control-Allow-Headers",
           "value": "Content-Type,Authorization"
         }
-      ]
-    },
-    {
-      "source": "/sw.js",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache" },
-        { "key": "Content-Type", "value": "application/javascript" }
       ]
     }
   ]

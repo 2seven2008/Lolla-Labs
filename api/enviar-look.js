@@ -10,23 +10,19 @@ export const config = {
 
 /**
  * POST /api/enviar-look
- * Accepts multipart/form-data with fields: nome, altura, cidade, categoria, descricao, imagem
+ * Public endpoint. Accepts multipart/form-data with fields:
+ * nome, altura, cidade, categoria, descricao, imagem
  */
 export default async function handler(req, res) {
-  // CORS preflight
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+  if (req.method === "OPTIONS") return res.status(200).end();
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Método não permitido" });
   }
 
   try {
-    // Parse multipart form
     const { fields, file, filename, mimetype } = await parseForm(req);
 
-    // Validate required fields
     const { nome, altura, cidade, categoria, descricao } = fields;
     if (!nome || !altura || !cidade || !categoria || !descricao) {
       return res
@@ -38,12 +34,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Imagem é obrigatória" });
     }
 
-    // Validate image type
     if (!mimetype.startsWith("image/")) {
       return res.status(400).json({ error: "O arquivo deve ser uma imagem" });
     }
 
-    // Validate altura
     const alturaNum = parseInt(altura);
     if (isNaN(alturaNum) || alturaNum < 140 || alturaNum > 220) {
       return res
@@ -51,10 +45,8 @@ export default async function handler(req, res) {
         .json({ error: "Altura inválida (entre 140 e 220 cm)" });
     }
 
-    // Upload to Cloudinary
     const imagem_url = await uploadImage(file, "lolla-labs/looks");
 
-    // Save to MongoDB
     const db = await getDb();
     const look = {
       nome: nome.trim(),
@@ -81,9 +73,6 @@ export default async function handler(req, res) {
   }
 }
 
-/**
- * Parse multipart/form-data using Busboy
- */
 function parseForm(req) {
   return new Promise((resolve, reject) => {
     const bb = Busboy({

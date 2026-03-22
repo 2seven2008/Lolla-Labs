@@ -5,7 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "lolla-labs-secret-dev";
 
 /**
  * GET /api/looks
- * Returns all looks. Requires Authorization header with Bearer token.
+ * Returns all looks. Requires Authorization: Bearer <token>
  * Query params: status (pendente|aprovado|rejeitado), categoria
  */
 export default async function handler(req, res) {
@@ -28,7 +28,6 @@ export default async function handler(req, res) {
   try {
     const db = await getDb();
 
-    // Build query
     const query = {};
     if (req.query.status) query.status = req.query.status;
     if (req.query.categoria) query.categoria = req.query.categoria;
