@@ -1,10 +1,10 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/agentes", "destination": "/public/agentes.html" },
-    { "source": "/login", "destination": "/public/login.html" },
-    { "source": "/enviar", "destination": "/public/enviar-look.html" },
-    { "source": "/", "destination": "/public/index.html" }
+    { "source": "/agentes", "destination": "/agentes.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/enviar", "destination": "/enviar-look.html" },
+    { "source": "/", "destination": "/index.html" }
   ],
   "headers": [
     {
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "source": "/public/sw.js",
+      "source": "/sw.js",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache" },
         { "key": "Content-Type", "value": "application/javascript" }
