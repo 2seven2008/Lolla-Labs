@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="Plataforma de casting digital da Lolla Labs. Envie seu look e seja descoberto.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Lolla Labs — Digital Casting</title>
+  <link rel="manifest" href="/public/manifest.json">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+
+  <div class="page-loader" id="pageLoader">
+    <span class="loader-text">L</span>
+  </div>
+
+  <header class="site-header">
+    <a href="/" class="logo">LOLLA <span>LABS</span></a>
+    <nav class="header-nav">
+      <a href="/enviar">Enviar Look</a>
+      <a href="/login">Agentes</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-label">Casting Digital 2025</div>
+      <h1 class="display">
+        Seu<br>
+        look,<br>
+        sua <em>história.</em>
+      </h1>
+      <p class="hero-sub">
+        Envie seu look para avaliação dos agentes da Lolla Labs e dê o próximo passo na sua carreira.
+      </p>
+      <div class="hero-actions">
+        <a href="/enviar" class="btn btn-primary animate-up delay-3">
+          Enviar meu look
+        </a>
+        <a href="#como-funciona" class="btn btn-ghost animate-up delay-4">
+          Saiba mais
+        </a>
+      </div>
+    </section>
+
+    <section id="como-funciona" style="padding: 4rem 1.5rem; max-width: 480px; margin: 0 auto;">
+      <div class="label" style="margin-bottom: 1.5rem; color: var(--gold);">— Como funciona</div>
+
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div class="animate-up" style="display: flex; gap: 1.25rem; align-items: flex-start;">
+          <div style="min-width: 2rem; font-family: var(--font-display); font-size: 2rem; color: var(--gold); line-height: 1;">01</div>
+          <div>
+            <div style="font-size: 0.9rem; font-weight: 400; margin-bottom: 0.3rem;">Cadastre seu look</div>
+            <div style="font-size: 0.8rem; color: var(--mid); line-height: 1.6;">Preencha seus dados, escolha a categoria e envie uma foto do seu look diretamente do celular ou câmera.</div>
+          </div>
+        </div>
+
+        <div class="animate-up delay-1" style="display: flex; gap: 1.25rem; align-items: flex-start;">
+          <div style="min-width: 2rem; font-family: var(--font-display); font-size: 2rem; color: var(--gold); line-height: 1;">02</div>
+          <div>
+            <div style="font-size: 0.9rem; font-weight: 400; margin-bottom: 0.3rem;">Agentes analisam</div>
+            <div style="font-size: 0.8rem; color: var(--mid); line-height: 1.6;">Nossa equipe avalia cada look com atenção, adicionando comentários e tomando decisões editoriais.</div>
+          </div>
+        </div>
+
+        <div class="animate-up delay-2" style="display: flex; gap: 1.25rem; align-items: flex-start;">
+          <div style="min-width: 2rem; font-family: var(--font-display); font-size: 2rem; color: var(--gold); line-height: 1;">03</div>
+          <div>
+            <div style="font-size: 0.9rem; font-weight: 400; margin-bottom: 0.3rem;">Receba feedback</div>
+            <div style="font-size: 0.8rem; color: var(--mid); line-height: 1.6;">Aprovações e comentários são registrados. Looks selecionados avançam para o processo de casting da Lolla Labs.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider" style="margin: 3rem 0 2.5rem;"></div>
+
+      <a href="/enviar" class="btn btn-primary" style="width: 100%;">Participar do casting</a>
+    </section>
+  </main>
+
+  <!-- Install Banner -->
+  <div class="install-banner" id="installBanner">
+    <div class="install-banner-text">
+      <strong>Instalar Lolla Labs</strong>
+      <span>Adicione à tela inicial</span>
+    </div>
+    <button class="btn btn-ghost btn-sm" id="installBtn">Instalar</button>
+    <button onclick="document.getElementById('installBanner').classList.remove('visible')" style="color: var(--muted); font-size: 1.2rem; padding: 0.25rem;">×</button>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

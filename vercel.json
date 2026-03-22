@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/agentes", "destination": "/pages/agentes.html" },
+    { "source": "/login", "destination": "/pages/login.html" },
+    { "source": "/enviar", "destination": "/pages/enviar-look.html" },
+    { "source": "/", "destination": "/pages/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,POST,PATCH,OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type,Authorization"
+        }
+      ]
+    },
+    {
+      "source": "/public/sw.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache" },
+        { "key": "Content-Type", "value": "application/javascript" }
+      ]
+    }
+  ]
+}
