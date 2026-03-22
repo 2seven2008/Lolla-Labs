@@ -6,15 +6,15 @@ PWA de casting digital para modelos enviarem looks para análise de agentes.
 
 ## Stack
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Frontend | HTML5, CSS3, JavaScript (Vanilla) |
-| Backend | Vercel Serverless Functions (Node.js) |
-| Banco de dados | MongoDB Atlas (não relacional) |
-| Upload de imagens | Cloudinary |
-| Autenticação | JWT + bcryptjs |
-| PWA | Service Worker + Web App Manifest |
-| Deploy | Vercel |
+| Camada            | Tecnologia                            |
+| ----------------- | ------------------------------------- |
+| Frontend          | HTML5, CSS3, JavaScript (Vanilla)     |
+| Backend           | Vercel Serverless Functions (Node.js) |
+| Banco de dados    | MongoDB Atlas (não relacional)        |
+| Upload de imagens | Cloudinary                            |
+| Autenticação      | JWT + bcryptjs                        |
+| PWA               | Service Worker + Web App Manifest     |
+| Deploy            | Vercel                                |
 
 ---
 
@@ -105,15 +105,15 @@ vercel --prod
 
 No dashboard do Vercel → Settings → Environment Variables, adicione:
 
-| Variável | Valor |
-|----------|-------|
-| `MONGODB_URI` | String de conexão do MongoDB Atlas |
-| `MONGODB_DB` | `lolla-labs` |
-| `CLOUDINARY_CLOUD_NAME` | Seu cloud name |
-| `CLOUDINARY_API_KEY` | Sua API key |
-| `CLOUDINARY_API_SECRET` | Seu API secret |
-| `JWT_SECRET` | String aleatória forte (mín. 32 chars) |
-| `JWT_EXPIRES` | `8h` |
+| Variável                | Valor                                  |
+| ----------------------- | -------------------------------------- |
+| `MONGODB_URI`           | String de conexão do MongoDB Atlas     |
+| `MONGODB_DB`            | `lolla-labs`                           |
+| `CLOUDINARY_CLOUD_NAME` | Seu cloud name                         |
+| `CLOUDINARY_API_KEY`    | Sua API key                            |
+| `CLOUDINARY_API_SECRET` | Seu API secret                         |
+| `JWT_SECRET`            | String aleatória forte (mín. 32 chars) |
+| `JWT_EXPIRES`           | `8h`                                   |
 
 ---
 
@@ -140,9 +140,11 @@ A coleção `looks` é criada automaticamente no primeiro envio.
 ## Endpoints da API
 
 ### POST `/api/enviar-look`
+
 Envia um novo look. Aceita `multipart/form-data`.
 
 **Campos:**
+
 ```
 nome        string  obrigatório
 altura      number  obrigatório  (140–220)
@@ -153,6 +155,7 @@ imagem      file    obrigatório  (JPG/PNG/WebP, máx 10MB)
 ```
 
 **Exemplo com curl:**
+
 ```bash
 curl -X POST https://seu-projeto.vercel.app/api/enviar-look \
   -F "nome=Ana Lima" \
@@ -164,6 +167,7 @@ curl -X POST https://seu-projeto.vercel.app/api/enviar-look \
 ```
 
 **Resposta 201:**
+
 ```json
 {
   "success": true,
@@ -175,9 +179,11 @@ curl -X POST https://seu-projeto.vercel.app/api/enviar-look \
 ---
 
 ### POST `/api/login`
+
 Autentica um agente e retorna JWT.
 
 **Body:**
+
 ```json
 {
   "email": "agente@lollalabs.com",
@@ -186,6 +192,7 @@ Autentica um agente e retorna JWT.
 ```
 
 **Resposta 200:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -196,6 +203,7 @@ Autentica um agente e retorna JWT.
 ```
 
 **Exemplo com curl:**
+
 ```bash
 curl -X POST https://seu-projeto.vercel.app/api/login \
   -H "Content-Type: application/json" \
@@ -205,20 +213,24 @@ curl -X POST https://seu-projeto.vercel.app/api/login \
 ---
 
 ### GET `/api/looks`
+
 Lista todos os looks. Requer autenticação.
 
 **Headers:**
+
 ```
 Authorization: Bearer <token>
 ```
 
 **Query params opcionais:**
+
 ```
 status     pendente | aprovado | rejeitado
 categoria  street | fashion | casual | ...
 ```
 
 **Exemplo com curl:**
+
 ```bash
 # Todos os looks
 curl https://seu-projeto.vercel.app/api/looks \
@@ -230,6 +242,7 @@ curl "https://seu-projeto.vercel.app/api/looks?status=pendente" \
 ```
 
 **Resposta 200:**
+
 ```json
 {
   "looks": [
@@ -253,15 +266,18 @@ curl "https://seu-projeto.vercel.app/api/looks?status=pendente" \
 ---
 
 ### PATCH `/api/analisar-look`
+
 Analisa (aprova ou rejeita) um look. Requer autenticação.
 
 **Headers:**
+
 ```
 Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
 **Body:**
+
 ```json
 {
   "id": "64f3a1b2c3d4e5f6a7b8c9d0",
@@ -271,6 +287,7 @@ Content-Type: application/json
 ```
 
 **Exemplo com curl:**
+
 ```bash
 curl -X PATCH https://seu-projeto.vercel.app/api/analisar-look \
   -H "Content-Type: application/json" \
@@ -283,6 +300,7 @@ curl -X PATCH https://seu-projeto.vercel.app/api/analisar-look \
 ```
 
 **Resposta 200:**
+
 ```json
 {
   "success": true,
@@ -294,14 +312,15 @@ curl -X PATCH https://seu-projeto.vercel.app/api/analisar-look \
 
 ## Acesso Demo
 
-| Rota | Descrição |
-|------|-----------|
-| `/` | Landing page |
-| `/enviar` | Formulário do modelo |
-| `/login` | Login dos agentes |
+| Rota       | Descrição                     |
+| ---------- | ----------------------------- |
+| `/`        | Landing page                  |
+| `/enviar`  | Formulário do modelo          |
+| `/login`   | Login dos agentes             |
 | `/agentes` | Painel de análise (protegido) |
 
 **Credenciais de agente demo:**
+
 ```
 Email: agente@lollalabs.com
 Senha: lolla2025
@@ -312,11 +331,13 @@ Senha: lolla2025
 ## Adicionando novos agentes
 
 Gere o hash bcrypt da senha no terminal:
+
 ```bash
 node -e "const b=require('bcryptjs'); console.log(b.hashSync('nova_senha', 10))"
 ```
 
 Configure a variável de ambiente `AGENTS_JSON` no Vercel:
+
 ```json
 [
   {

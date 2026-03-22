@@ -1,48 +1,48 @@
-const CACHE_NAME = 'lolla-labs-v1';
+const CACHE_NAME = "lolla-labs-v1";
 const STATIC_ASSETS = [
-  '/',
-  '/enviar',
-  '/login',
-  '/css/style.css',
-  '/js/app.js',
-  '/js/api.js',
-  '/js/auth.js',
-  '/public/manifest.json'
+  "/",
+  "/enviar",
+  "/login",
+  "./css/style.css",
+  "./js/app.js",
+  "./js/api.js",
+  "./js/auth.js",
+  "/public/manifest.json",
 ];
 
 // Install: cache static assets
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS).catch(() => {
         // Silently fail for assets that can't be cached
       });
-    })
+    }),
   );
   self.skipWaiting();
 });
 
 // Activate: clean old caches
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
           .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
+          .map((name) => caches.delete(name)),
       );
-    })
+    }),
   );
   self.clients.claim();
 });
 
 // Fetch: network-first for API, cache-first for static
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
   // Skip non-GET and API requests (don't cache)
-  if (request.method !== 'GET' || url.pathname.startsWith('/api/')) {
+  if (request.method !== "GET" || url.pathname.startsWith("/api/")) {
     return;
   }
 
@@ -51,29 +51,34 @@ self.addEventListener('fetch', (event) => {
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) {
         // Refresh cache in background
-        fetch(request).then((networkResponse) => {
-          if (networkResponse.ok) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, networkResponse);
-            });
-          }
-        }).catch(() => {});
+        fetch(request)
+          .then((networkResponse) => {
+            if (networkResponse.ok) {
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(request, networkResponse);
+              });
+            }
+          })
+          .catch(() => {});
         return cachedResponse;
       }
 
       // Network fallback
-      return fetch(request).then((networkResponse) => {
-        if (networkResponse.ok) {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, responseClone);
-          });
-        }
-        return networkResponse;
-      }).catch(() => {
-        // Offline fallback HTML
-        if (request.headers.get('accept').includes('text/html')) {
-          return new Response(`
+      return fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseClone);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          // Offline fallback HTML
+          if (request.headers.get("accept").includes("text/html")) {
+            return new Response(
+              `
             <!DOCTYPE html>
             <html lang="pt-BR">
             <head>
@@ -93,21 +98,23 @@ self.addEventListener('fetch', (event) => {
               </div>
             </body>
             </html>
-          `, { headers: { 'Content-Type': 'text/html' } });
-        }
-      });
-    })
+          `,
+              { headers: { "Content-Type": "text/html" } },
+            );
+          }
+        });
+    }),
   );
 });
 
 // Background sync for pending submissions
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-looks') {
+self.addEventListener("sync", (event) => {
+  if (event.tag === "sync-looks") {
     event.waitUntil(syncPendingLooks());
   }
 });
 
 async function syncPendingLooks() {
   // In a full implementation, read from IndexedDB and retry failed submissions
-  console.log('[SW] Syncing pending looks...');
+  console.log("[SW] Syncing pending looks...");
 }
