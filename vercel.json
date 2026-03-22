@@ -1,10 +1,10 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/agentes", "destination": "/public/pages/agentes.html" },
-    { "source": "/login", "destination": "/public/pages/login.html" },
-    { "source": "/enviar", "destination": "/public/pages/enviar-look.html" },
-    { "source": "/", "destination": "/public/pages/index.html" }
+    { "source": "/agentes", "destination": "/public/agentes.html" },
+    { "source": "/login", "destination": "/public/login.html" },
+    { "source": "/enviar", "destination": "/public/enviar-look.html" },
+    { "source": "/", "destination": "/public/index.html" }
   ],
   "headers": [
     {
