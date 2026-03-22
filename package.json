@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Lolla Labs Digital Casting Platform",
   "private": true,
-  "engines": {
-    "node": ">=18.x"
-  },
+  "type": "module",
   "dependencies": {
     "mongodb": "^6.3.0",
     "cloudinary": "^1.41.3",
